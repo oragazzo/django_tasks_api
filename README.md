@@ -13,6 +13,8 @@ tasks_api/
 │   └── server/            # API server service
 │       └── Dockerfile     # Server container configuration
 ├── docker-compose.yaml     # Docker services orchestration
+├── .env                    # Environment variables (not in version control)
+├── .env.example           # Environment variables template
 ├── requirements.txt        # Python dependencies
 └── ... (other project files)
 ```
@@ -24,6 +26,7 @@ tasks_api/
 - Docker containerization
 - Health checks and container orchestration
 - Clean separation of deployment configurations
+- Environment-based configuration
 
 ## Prerequisites
 
@@ -39,12 +42,18 @@ tasks_api/
    cd tasks_api
    ```
 
-2. Start the application using Docker Compose:
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your desired configuration
+   ```
+
+3. Start the application using Docker Compose:
    ```bash
    docker-compose up --build
    ```
 
-3. The API will be available at:
+4. The API will be available at:
    ```
    http://localhost:8000
    ```
@@ -62,20 +71,21 @@ tasks_api/
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-2. Install dependencies:
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your configuration
+   # For local development, make sure DATABASE_HOST=localhost
+   ```
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Create PostgreSQL database:
+4. Create PostgreSQL database:
    ```sql
    createdb basic_api
-   ```
-
-4. Set up environment variables:
-   ```bash
-   export DEBUG=1
-   export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/basic_api
    ```
 
 5. Run migrations:
@@ -88,19 +98,35 @@ tasks_api/
    python manage.py runserver
    ```
 
+## Environment Variables
+
+The project uses a `.env` file for configuration. Copy `.env.example` to `.env` and adjust the values:
+
+```bash
+# Django Settings
+DEBUG=1
+SECRET_KEY=your-secret-key-here
+
+# Database Settings
+DATABASE_NAME=basic_api
+DATABASE_USER=<DB_USER>
+DATABASE_PASSWORD=<DB_PASSWORD>
+DATABASE_HOST=db        # Use 'db' for Docker, 'localhost' for local development
+DATABASE_PORT=5432
+
+# PostgreSQL Container Settings
+POSTGRES_DB=basic_api
+POSTGRES_USER=<PG_USER>
+POSTGRES_PASSWORD=<PG_PASSWORD>
+```
+
 ## Development
 
 - The Docker setup includes hot-reload for development
 - Database data is persisted in a Docker volume
 - PostgreSQL is accessible on port 5432
 - The API server runs on port 8000
-
-## Environment Variables
-
-- `DEBUG`: Enable debug mode (default: 1)
-- `DATABASE_URL`: PostgreSQL connection URL
-- `POSTGRES_USER`: Database user (default: postgres)
-- `POSTGRES_PASSWORD`: Database password (default: postgres)
+- Environment variables are loaded from `.env` file
 
 ## Docker Commands
 
@@ -128,4 +154,6 @@ tasks_api/
 
 - The Docker setup includes health checks to ensure the database is ready before starting the API
 - Database initialization is handled through the `init.sql` script
-- The project uses a multi-stage Docker setup with separate configurations for the database and API server 
+- The project uses a multi-stage Docker setup with separate configurations for the database and API server
+- Sensitive information and configuration is managed through environment variables
+- The `.env` file is not included in version control for security reasons 
