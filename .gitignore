@@ -1,9 +1,9 @@
 # Python
-*.py[cod]
 __pycache__/
+*.py[cod]
+*$py.class
 *.so
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -15,23 +15,15 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# Django
-*.log
-*.pot
-*.pyc
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-media/
-staticfiles/
-
 # Virtual Environment
 venv/
 ENV/
+env/
 .env
 
 # IDE
@@ -39,8 +31,25 @@ ENV/
 .vscode/
 *.swp
 *.swo
-*~
 
-# OS
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# macOS
 .DS_Store
-Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Misc
+*.bak
+*.tmp
+*.temp
