@@ -1,25 +1,23 @@
-FROM python:3.12.8-slim-bookworm
+FROM python:3.12.8-alpine
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    DEBIAN_FRONTEND=noninteractive
+    PYTHONUNBUFFERED=1
 
 # Set work directory
 WORKDIR /app
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN apt-get update && \
-    apt-get install -y \
-    netcat-traditional \
+RUN apk add --no-cache \
+    netcat-openbsd \
     gcc \
     python3-dev \
-    libpq-dev \
+    postgresql-dev \
     postgresql-client \
+    musl-dev \
     && pip install -r requirements.txt \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /root/.cache/pip/*
 
 # Copy project files
 COPY . .
