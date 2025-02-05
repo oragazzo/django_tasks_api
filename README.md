@@ -27,7 +27,7 @@ tasks_api/
 
 ## Prerequisites
 
-- Python 3.11+
+- Python 3.12+
 - PostgreSQL 15+
 - Docker and Docker Compose (for containerized setup)
 
@@ -35,7 +35,7 @@ tasks_api/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/oragazzo/tasks_api.git
    cd tasks_api
    ```
 
@@ -53,6 +53,11 @@ tasks_api/
 
 1. Create a virtual environment:
    ```bash
+   # Option 1: Using Conda (Recommended)
+   conda create -n tasks_api python=3.12
+   conda activate tasks_api
+
+   # Option 2: Using venv
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
