@@ -2,7 +2,9 @@ from django.db import models
 
 class Task(models.Model):
 
-    task = models.TextField(null=True)
+    task = models.TextField(null=False)
+    note = models.TextField(null=True)
+
     completed = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
 
