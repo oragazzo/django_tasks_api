@@ -5,11 +5,6 @@ services:
       dockerfile: deploy/server/Dockerfile
     command: >
       sh -c "
-             while ! nc -z db 5432; do
-               echo 'Waiting for database to be ready...'
-               sleep 2
-             done
-             echo 'Database is ready!'
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     ports:
