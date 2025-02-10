@@ -6,33 +6,46 @@ This project demonstrates a Django REST API implementation with Docker, showcasi
 
 ```
 tasks_api/
-├── deploy/                  # Deployment configurations
-│   ├── postgres/           # PostgreSQL service
-│   │   ├── Dockerfile     # PostgreSQL container configuration
-│   │   └── init.sql       # Database initialization script
-│   └── server/            # API server service
-│       └── Dockerfile     # Server container configuration
-├── docker-compose.yaml     # Docker services orchestration
-├── .env                    # Environment variables (not in version control)
-├── .env.example           # Environment variables template
-├── requirements.txt        # Python dependencies
-└── ... (other project files)
+├── api/                    # API application
+│   ├── views.py           # API endpoints
+│   ├── models.py          # Data models
+│   ├── serializers.py     # Data serializers
+│   └── urls.py            # API routing
+├── backend/               # Django project settings
+│   ├── settings.py        # Project configuration
+│   ├── urls.py           # Project URL routing
+│   └── wsgi.py           # WSGI configuration
+├── deploy/                # Deployment configurations
+│   ├── postgres/         # PostgreSQL service
+│   │   ├── Dockerfile    # PostgreSQL container configuration
+│   │   └── init.sql      # Database initialization script
+│   └── server/           # API server service
+│       └── Dockerfile    # Server container configuration
+├── docker-compose.yaml    # Docker services orchestration
+├── Makefile              # Development automation
+├── .env                  # Environment variables (not in version control)
+├── .env.example          # Environment variables template
+├── requirements.txt      # Python dependencies
+└── manage.py            # Django management script
 ```
 
 ## Features
 
-- Django REST Framework API
-- PostgreSQL Database
-- Docker containerization
+- RESTful API endpoints for task management
+- Django REST Framework with browsable API interface
+- PostgreSQL Database for data persistence
+- Docker containerization with multi-stage builds
 - Health checks and container orchestration
-- Clean separation of deployment configurations
 - Environment-based configuration
+- Comprehensive API documentation
+- Test coverage for API endpoints
 
 ## Prerequisites
 
 - Python 3.12+
 - PostgreSQL 15+
-- Docker and Docker Compose (for containerized setup)
+- Docker 24.0+ and Docker Compose V2
+- Make (optional, for using Makefile commands)
 
 ## Quick Start with Docker
 
@@ -53,10 +66,6 @@ tasks_api/
    docker-compose up --build
    ```
 
-4. The API will be available at:
-   ```
-   http://localhost:8000
-   ```
 
 ## Manual Setup (Without Docker)
 
@@ -84,13 +93,14 @@ tasks_api/
    ```
 
 4. Create PostgreSQL database:
-   ```sql
+   ```bash
    createdb basic_api
    ```
 
-5. Run migrations:
+5. Run migrations and create superuser:
    ```bash
    python manage.py migrate
+   python manage.py createsuperuser
    ```
 
 6. Start the development server:
@@ -106,6 +116,7 @@ The project uses a `.env` file for configuration. Copy `.env.example` to `.env` 
 # Django Settings
 DEBUG=1
 SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=localhost,127.0.0.1
 
 # Database Settings
 DATABASE_NAME=basic_api
@@ -130,30 +141,39 @@ POSTGRES_PASSWORD=<PG_PASSWORD>
 
 ## Docker Commands
 
-- Start services:
-  ```bash
-  docker-compose up
-  ```
+Common commands for managing the Docker environment:
 
-- Rebuild and start services:
-  ```bash
-  docker-compose up --build
-  ```
+```bash
+# Start services in development mode
+docker-compose up
 
-- Stop services:
-  ```bash
-  docker-compose down
-  ```
+# Start services in detached mode
+docker-compose up -d
 
-- View logs:
-  ```bash
-  docker-compose logs -f
-  ```
+# Rebuild and start services
+docker-compose up --build
 
-## Notes
+# Stop services
+docker-compose down
 
-- The Docker setup includes health checks to ensure the database is ready before starting the API
-- Database initialization is handled through the `init.sql` script
-- The project uses a multi-stage Docker setup with separate configurations for the database and API server
-- Sensitive information and configuration is managed through environment variables
-- The `.env` file is not included in version control for security reasons 
+# Stop services and remove volumes
+docker-compose down -v
+
+# View logs
+docker-compose logs -f
+
+# View logs for specific service
+docker-compose logs -f api
+```
+
+## Security Notes
+
+- The `.env` file contains sensitive information and is not included in version control
+- Default Django admin credentials should be changed in production
+- Debug mode should be disabled in production
+- Use strong passwords for database and Django admin
+- Regular security updates should be applied to all dependencies
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details 
